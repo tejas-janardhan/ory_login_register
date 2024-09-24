@@ -4,18 +4,23 @@ import { checkRole, protectRoute, unProtectRoute } from "./middleware";
 
 export const homeRouter = Router();
 
+homeRouter.get("/", protectRoute, async (req, res) => {
+  res.redirect("home");
+});
+
 homeRouter.get("/home", protectRoute, async (req, res) => {
   res.render("protectedHome", {
     email: req?.session?.identity?.traits?.email ?? "No Email",
     loggedInAt: req?.session?.issued_at,
   });
 });
+
 homeRouter.get(
   "/home/customer",
   protectRoute,
   checkRole("customer"),
   async (req, res) => {
-    res.render("protectedHome", {
+    res.render("protectedCustomer", {
       email: req?.session?.identity?.traits?.email ?? "No Email",
       loggedInAt: req?.session?.issued_at,
     });
@@ -26,7 +31,7 @@ homeRouter.get(
   checkRole("admin"),
   protectRoute,
   async (req, res) => {
-    res.render("protectedHome", {
+    res.render("protectedAdmin", {
       email: req?.session?.identity?.traits?.email ?? "No Email",
       loggedInAt: req?.session?.issued_at,
     });
@@ -199,7 +204,7 @@ registerRouter.post("/google/register", async (req, res) => {
 });
 
 registerRouter.post("/register", async (req, res) => {
-  const { flow, email, csrfToken } = req.body;
+  const { flow, email, csrfToken, code } = req.body;
 
   const registerFlow = await ory.frontEnd.updateRegistrationFlow(
     {
@@ -208,6 +213,7 @@ registerRouter.post("/register", async (req, res) => {
       updateRegistrationFlowBody: {
         csrf_token: csrfToken,
         method: "code",
+        ...(code ? { code } : {}),
         traits: {
           email,
         },

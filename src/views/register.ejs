@@ -35,7 +35,10 @@
         resp = await sumbitEmail(email, flow, csrfToken, code);
       }
 
-      if (resp.status === 200) {
+      if (
+        (resp.status === 200 && state === "sent_email") ||
+        (resp.status === 400 && state !== "sent_email")
+      ) {
         if (state === "sent_email") {
           window.location.replace(`/home`);
         } else {
@@ -247,7 +250,7 @@
             margin-bottom: auto;
             margin-right: 5px;
           "
-        />Google Login
+        />Google Register
       </button>
       <div
         style="
