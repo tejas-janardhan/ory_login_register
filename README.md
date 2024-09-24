@@ -25,7 +25,7 @@ ory.config.json can be used to keep all ory deployments in sync through the ory 
 
 - Using ejs partials/templates to organise html code.
 - Using css stylesheets and js files.
-- Refactor code to reduce code reduce and improve extensability.
+- Refactor code to reduce code reuse and improve extensibility.
 - Redirects can be smoother - resend code can be its own seperate route.
 - Separate route to create an admin user by updating a user with that metadata
 - Redirect for oauth register should send to a page to trigger customer role update.
