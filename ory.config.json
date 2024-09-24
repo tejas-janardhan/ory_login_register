@@ -1,3 +1,213 @@
 {
-    "name": "My Ory Projecy"
+  "cookies": {
+    "domain": "ENTER_YOUR_ORY_DOMAIN",
+    "path": "/",
+    "same_site": "Lax"
+  },
+  "courier": {
+    "smtp": { "from_name": "ENTER_YOUR_FROM_NAME"},
+    "templates": {
+      "login_code": {
+        "valid": { "email": { "body": {} }, "sms": { "body": {} } }
+      },
+      "recovery": {
+        "invalid": { "email": { "body": {} } },
+        "valid": { "email": { "body": {} } }
+      },
+      "recovery_code": {
+        "invalid": { "email": { "body": {} } },
+        "valid": { "email": { "body": {} } }
+      },
+      "registration_code": { "valid": { "email": { "body": {} } } },
+      "verification": {
+        "invalid": { "email": { "body": {} } },
+        "valid": { "email": { "body": {} } }
+      },
+      "verification_code": {
+        "invalid": { "email": { "body": {} } },
+        "valid": { "email": { "body": {} }, "sms": { "body": {} } }
+      }
+    }
+  },
+  "feature_flags": {
+    "cacheable_sessions": false,
+    "cacheable_sessions_max_age": "2m30s",
+    "faster_session_extend": true,
+    "use_continue_with_transitions": true
+  },
+  "identity": {
+    "default_schema_id": "preset://email",
+    "schemas": [
+      {
+        "id": "preset://email",
+        "url": "base64://ewogICIkaWQiOiAiaHR0cHM6Ly9zY2hlbWFzLm9yeS5zaC9wcmVzZXRzL2tyYXRvcy9pZGVudGl0eS5lbWFpbC5zY2hlbWEuanNvbiIsCiAgIiRzY2hlbWEiOiAiaHR0cDovL2pzb24tc2NoZW1hLm9yZy9kcmFmdC0wNy9zY2hlbWEjIiwKICAidGl0bGUiOiAiUGVyc29uIiwKICAidHlwZSI6ICJvYmplY3QiLAogICJwcm9wZXJ0aWVzIjogewogICAgInRyYWl0cyI6IHsKICAgICAgInR5cGUiOiAib2JqZWN0IiwKICAgICAgInByb3BlcnRpZXMiOiB7CiAgICAgICAgImVtYWlsIjogewogICAgICAgICAgInR5cGUiOiAic3RyaW5nIiwKICAgICAgICAgICJmb3JtYXQiOiAiZW1haWwiLAogICAgICAgICAgInRpdGxlIjogIkUtTWFpbCIsCiAgICAgICAgICAib3J5LnNoL2tyYXRvcyI6IHsKICAgICAgICAgICAgImNyZWRlbnRpYWxzIjogewogICAgICAgICAgICAgICJwYXNzd29yZCI6IHsKICAgICAgICAgICAgICAgICJpZGVudGlmaWVyIjogdHJ1ZQogICAgICAgICAgICAgIH0sCiAgICAgICAgICAgICAgIndlYmF1dGhuIjogewogICAgICAgICAgICAgICAgImlkZW50aWZpZXIiOiB0cnVlCiAgICAgICAgICAgICAgfSwKICAgICAgICAgICAgICAidG90cCI6IHsKICAgICAgICAgICAgICAgICJhY2NvdW50X25hbWUiOiB0cnVlCiAgICAgICAgICAgICAgfSwKICAgICAgICAgICAgICAiY29kZSI6IHsKICAgICAgICAgICAgICAgICJpZGVudGlmaWVyIjogdHJ1ZSwKICAgICAgICAgICAgICAgICJ2aWEiOiAiZW1haWwiCiAgICAgICAgICAgICAgfSwKICAgICAgICAgICAgICAicGFzc2tleSI6IHsKICAgICAgICAgICAgICAgICJkaXNwbGF5X25hbWUiOiB0cnVlCiAgICAgICAgICAgICAgfQogICAgICAgICAgICB9LAogICAgICAgICAgICAicmVjb3ZlcnkiOiB7CiAgICAgICAgICAgICAgInZpYSI6ICJlbWFpbCIKICAgICAgICAgICAgfSwKICAgICAgICAgICAgInZlcmlmaWNhdGlvbiI6IHsKICAgICAgICAgICAgICAidmlhIjogImVtYWlsIgogICAgICAgICAgICB9CiAgICAgICAgICB9LAogICAgICAgICAgIm1heExlbmd0aCI6IDMyMAogICAgICAgIH0KICAgICAgfSwKICAgICAgInJlcXVpcmVkIjogWwogICAgICAgICJlbWFpbCIKICAgICAgXSwKICAgICAgImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjogZmFsc2UKICAgIH0KICB9Cn0K"
+      }
+    ]
+  },
+  "oauth2_provider": { "override_return_to": true },
+  "preview": { "default_read_consistency_level": "strong" },
+  "security": { "account_enumeration": { "mitigate": true } },
+  "selfservice": {
+    "allowed_return_urls": [
+      "ENTER_YOUR_ORY_DOMAIN",
+      "/ui/logout",
+      "/ui/consent",
+      "/ui/welcome",
+      "/ui/sessions",
+      "ENTER_YOUR_ORY_DOMAIN/ui/error",
+      "ENTER_YOUR_ORY_DOMAIN/ui/login",
+      "ENTER_YOUR_ORY_DOMAIN/ui/recovery",
+      "ENTER_YOUR_ORY_DOMAIN/ui/settings",
+      "ENTER_YOUR_ORY_DOMAIN/ui/registration",
+      "ENTER_YOUR_ORY_DOMAIN/ui/verification"
+    ],
+    "default_browser_return_url": "/ui/welcome",
+    "flows": {
+      "error": {
+        "ui_url": "ENTER_YOUR_ORY_DOMAIN/ui/error"
+      },
+      "login": {
+        "after": {
+          "code": { "hooks": [] },
+          "hooks": [],
+          "lookup_secret": { "hooks": [] },
+          "oidc": {
+            "default_browser_return_url": "http://localhost:4000/home",
+            "hooks": []
+          },
+          "passkey": { "hooks": [] },
+          "password": { "hooks": [] },
+          "totp": { "hooks": [] },
+          "webauthn": { "hooks": [] }
+        },
+        "before": { "hooks": [] },
+        "style": "unified",
+        "ui_url": "ENTER_YOUR_ORY_DOMAIN/ui/login"
+      },
+      "logout": { "after": {} },
+      "recovery": {
+        "after": { "hooks": [] },
+        "before": { "hooks": [] },
+        "enabled": true,
+        "notify_unknown_recipients": false,
+        "ui_url": "ENTER_YOUR_ORY_DOMAIN/ui/recovery",
+        "use": "code"
+      },
+      "registration": {
+        "after": {
+          "code": { "hooks": [{ "hook": "session" }] },
+          "hooks": [],
+          "oidc": { "hooks": [{ "hook": "session" }] },
+          "passkey": { "hooks": [{ "hook": "session" }] },
+          "password": { "hooks": [{ "hook": "session" }] },
+          "webauthn": { "hooks": [{ "hook": "session" }] }
+        },
+        "before": { "hooks": [] },
+        "enable_legacy_one_step": true,
+        "login_hints": true,
+        "ui_url": "ENTER_YOUR_ORY_DOMAIN/ui/registration"
+      },
+      "settings": {
+        "after": {
+          "hooks": [],
+          "lookup_secret": { "hooks": [] },
+          "oidc": { "hooks": [] },
+          "passkey": { "hooks": [] },
+          "password": { "hooks": [] },
+          "profile": { "hooks": [] },
+          "totp": { "hooks": [] },
+          "webauthn": { "hooks": [] }
+        },
+        "before": { "hooks": [] },
+        "privileged_session_max_age": "15m0s",
+        "required_aal": "highest_available",
+        "ui_url": "ENTER_YOUR_ORY_DOMAIN/ui/settings"
+      },
+      "verification": {
+        "after": { "hooks": [] },
+        "before": { "hooks": [] },
+        "enabled": true,
+        "notify_unknown_recipients": false,
+        "ui_url": "ENTER_YOUR_ORY_DOMAIN/ui/verification",
+        "use": "code"
+      }
+    },
+    "methods": {
+      "b2b": { "config": { "organizations": [] } },
+      "code": {
+        "config": { "missing_credential_fallback_enabled": true },
+        "passwordless_enabled": true
+      },
+      "link": { "config": { "base_url": "" }, "enabled": true },
+      "lookup_secret": {},
+      "oidc": {
+        "config": {
+          "base_redirect_uri": "http://localhost:4000/home",
+          "providers": [
+            {
+              "client_id": "ENTER_YOUR_CLIENT_ID",
+              "client_secret": "ENTER_YOUR_CLIENT_SECRET",
+              "id": "google",
+              "label": "Google",
+              "mapper_url": "https://storage.googleapis.com/bac-gcs-production/5cc91d5237bdc180cee392a7c95b3df37604841b707452f30ecac7c5033e923f2c3bf1cd3e2be742b1bff5af4ffb11d3d72f19ca26dcbe8a3b07e1fb652a95a7.jsonnet",
+              "provider": "google",
+              "scope": ["email", "profile"]
+            }
+          ]
+        },
+        "enabled": true
+      },
+      "passkey": {
+        "config": {
+          "rp": {
+            "display_name": "Tejas Janardhan's Project",
+            "id": "ENTER_YOUR_ORY_SLUG.projects.oryapis.com",
+            "origins": [
+              "ENTER_YOUR_ORY_DOMAIN"
+            ]
+          }
+        },
+        "enabled": true
+      },
+      "password": { "config": {} },
+      "profile": {},
+      "totp": { "config": { "issuer": "Tejas Janardhan's Project" } },
+      "webauthn": {
+        "config": {
+          "passwordless": false,
+          "rp": {
+            "display_name": "Tejas Janardhan's Project",
+            "id": "ENTER_YOUR_ORY_SLUG.projects.oryapis.com",
+            "origins": [
+              "ENTER_YOUR_ORY_DOMAIN"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "serve": {
+    "admin": {
+      "base_url": "ENTER_YOUR_ORY_DOMAIN/",
+      "request_log": { "disable_for_health": true }
+    },
+    "public": {
+      "base_url": "ENTER_YOUR_ORY_DOMAIN/",
+      "cors": { "enabled": false },
+      "request_log": { "disable_for_health": true }
+    }
+  },
+  "session": {
+    "cookie": {
+      "domain": "ENTER_YOUR_ORY_SLUG.projects.oryapis.com",
+      "name": "ory_session_ENTER_YOUR_ORY_SLUG_NO_HYPHEN",
+      "path": "/",
+      "same_site": "Lax"
+    },
+    "lifespan": "72h0m0s",
+    "whoami": {
+      "required_aal": "highest_available",
+      "tokenizer": { "templates": {} }
+    }
+  }
 }
