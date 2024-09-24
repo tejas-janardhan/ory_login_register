@@ -28,8 +28,8 @@ homeRouter.get(
 );
 homeRouter.get(
   "/home/admin",
-  checkRole("admin"),
   protectRoute,
+  checkRole("admin"),
   async (req, res) => {
     res.render("protectedAdmin", {
       email: req?.session?.identity?.traits?.email ?? "No Email",
