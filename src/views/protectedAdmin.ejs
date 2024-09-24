@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="/static/ory.png" type="image/x-icon" />
+</head>
+<body style="margin: 0px">
+  <div
+    style="
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: antiquewhite;
+    "
+  >
+    <div
+      style="
+        border-radius: 30px;
+        display: flex;
+        flex-direction: column;
+        border-color: blue;
+        border-width: 2px;
+        border-style: solid;
+        align-items: center;
+        justify-content: space-between;
+        width: 300px;
+        height: 300px;
+        background-color: white;
+        padding: 20px;
+      "
+    >
+      <div style="font-size: 40px; font-weight: 700">Role - Admin</div>
+      <div style="font-size: 20px; font-weight: 700; text-align: center">
+        <div style="font-style: italic">Email</div>
+        <div><%= email %></div>
+      </div>
+      <div style="font-size: 20px; font-weight: 700; text-align: center">
+        <div style="font-style: italic">Logged In At</div>
+        <div><%= loggedInAt %></div>
+      </div>
+    </div>
+  </div>
+</body>

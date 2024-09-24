@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="/static/ory.png" type="image/x-icon" />
+</head>
+<body style="margin: 0px">
+  <script>
+    async function sumbitHandler() {
+      const flow = document.getElementById("flowId").value;
+      const csrfToken = document.getElementById("csrfTokenId").value;
+      const state = document.getElementById("stateId").value;
+
+      let email;
+      let resp;
+
+      if (state !== "sent_email") {
+        const emailElement = document.getElementById("email");
+        email = emailElement.value;
+
+        if (emailElement.validity.valid) {
+          resp = await sumbitEmail(email, flow, csrfToken);
+        } else {
+          window.alert("Invalid Email");
+          return;
+        }
+      } else {
+        const codeElement = document.getElementById("code");
+        const code = codeElement.value;
+        email = document.getElementById("emailId").value;
+
+        if (!codeElement.validity.valid || code.length !== 6) {
+          window.alert("Invalid Code");
+          return;
+        }
+        resp = await sumbitEmail(email, flow, csrfToken, code);
+      }
+
+      if (resp.status === 200) {
+        if (state === "sent_email") {
+          window.location.replace(`/home`);
+        } else {
+          window.location.replace(
+            `/register?flow=${flow}&email=${btoa(email)}`
+          );
+        }
+      } else {
+        const messages = (await resp.json()).ui.messages.map(
+          (message) => message.text
+        );
+        window.alert(messages);
+        return;
+      }
+    }
+
+    async function handleGoogleSubmit() {
+      const flow = document.getElementById("flowId").value;
+      const csrfToken = document.getElementById("csrfTokenId").value;
+
+      const resp = await (await registerGoogle(flow, csrfToken)).json();
+      const redirectUrl = new URL(resp.redirect_browser_to);
+      window.location.replace(redirectUrl);
+    }
+
+    async function registerGoogle(flow, csrfToken) {
+      return await fetch("/google/register", {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          flow,
+          csrfToken,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
+
+    async function resendHandler() {
+      const email = document.getElementById("emailId").value;
+      window.location.replace(`/register?email=${btoa(email)}`);
+    }
+
+    async function sumbitEmail(email, flow, csrfToken, code) {
+      return await fetch("/register", {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          email,
+          flow,
+          csrfToken,
+          ...(code ? { code } : {}),
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
+
+    window.onload = async () => {
+      const currentUrl = new URL(window.location.href);
+      const flow = currentUrl.searchParams.get("flow");
+      const email = currentUrl.searchParams.get("email");
+
+      if (email && !flow) {
+        const flowVal = document.getElementById("flowId").value;
+        const emailVal = document.getElementById("emailId").value;
+        const csrfToken = document.getElementById("csrfTokenId").value;
+
+        const resp = await sumbitEmail(emailVal, flowVal, csrfToken);
+        if (resp.status === 400) {
+          window.location.replace(
+            `/register?flow=${flowVal}&email=${btoa(emailVal)}`
+          );
+        }
+      }
+    };
+  </script>
+  <input id="stateId" value="<%=  state  %>" style="display: none" />
+  <input id="flowId" value="<%=  flow  %>" style="display: none" />
+  <input id="csrfTokenId" value="<%=  csrfToken  %>" style="display: none" />
+  <%if (email) { %>
+  <input id="emailId" value="<%=  email  %>" style="display: none" />
+  <% } %>
+  <div
+    style="
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: antiquewhite;
+    "
+  >
+    <div
+      style="
+        border-radius: 30px;
+        display: flex;
+        flex-direction: column;
+        border-color: blue;
+        border-width: 2px;
+        border-style: solid;
+        align-items: center;
+        justify-content: space-between;
+        width: 300px;
+        height: 500px;
+        background-color: white;
+        padding: 20px;
+      "
+    >
+      <div style="font-size: 40px; font-weight: 700">Register</div>
+      <div
+        style="
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 20px;
+          width: 100%;
+        "
+      >
+        <%if (state === 'sent_email') { %>
+        <div
+          style="
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          "
+        >
+          <div style="font-size: 20px; font-weight: 700; text-align: center">
+            Enter Code for -
+            <span style="font-size: 13px; font-weight: 500"><%= email %></span>
+          </div>
+          <input
+            id="code"
+            type="text"
+            maxlength="6"
+            required
+            style="outline: none; height: 30px; width: 40%"
+          />
+        </div>
+        <% } %> <%if (state !== 'sent_email') { %>
+        <div
+          style="
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          "
+        >
+          <div style="font-size: 25px; font-weight: 700">Enter Email</div>
+          <input
+            id="email"
+            type="email"
+            required
+            style="outline: none; height: 30px; width: 85%"
+          />
+        </div>
+        <% } %>
+        <button
+          onclick="sumbitHandler()"
+          style="
+            font-size: 20px;
+            font-weight: 700;
+            padding: 5px;
+            background-color: cadetblue;
+            color: white;
+            box-shadow: none;
+            text-shadow: none;
+            border-radius: 10px;
+          "
+        >
+          Submit
+        </button>
+        <%if (state === 'sent_email') { %>
+        <div
+          style="
+            font-size: 15px;
+            font-weight: 700;
+            margin-top: 10px;
+            cursor: pointer;
+          "
+          onclick="resendHandler()"
+        >
+          Resend Code
+        </div>
+        <% } %>
+      </div>
+      <button
+        onclick="handleGoogleSubmit()"
+        style="
+          font-size: 20px;
+          font-weight: 700;
+          padding: 5px;
+          background-color: cadetblue;
+          color: white;
+          box-shadow: none;
+          text-shadow: none;
+          border-radius: 10px;
+        "
+      >
+        <img
+          src="/static/google.png"
+          style="
+            width: 20px;
+            height: 20px;
+            margin-top: auto;
+            margin-bottom: auto;
+            margin-right: 5px;
+          "
+        />Google Login
+      </button>
+      <div
+        style="
+          font-size: 18px;
+          font-weight: 700;
+          padding: 5px;
+          text-align: center;
+        "
+      >
+        <div>Already have an account ?</div>
+        <a href="/login">Login</a>
+      </div>
+    </div>
+  </div>
+</body>
